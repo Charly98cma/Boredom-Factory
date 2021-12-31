@@ -15,6 +15,7 @@ BIN_REP = "0:0{}b"
 def _print_result(text: str, out_method: int) -> None:
     """Print the text after applying the operation specified by the user.
 
+
     Parameters
     ----------
     text: str - Text to print
@@ -40,9 +41,11 @@ def _print_result(text: str, out_method: int) -> None:
 def _read_path(file_path: str) -> str:
     """Read the path to a file (absolute or relative).
 
+
     Parameters
     ----------
     file_path: str - Path to the file (absolute or relative)
+
 
     Returns
     -------
@@ -54,38 +57,51 @@ def _read_path(file_path: str) -> str:
     return file_path
 
 
+def _read_text_file():
+    """
+    Reads user input from a file
+    """
+    while True:
+        f_path = _read_path(input("-- Path to file: "))
+        try:
+            return open(f_path, "r").read()
+        except FileNotFoundError:
+            print("*** No such file or directory: '{}' ***".format(f_path),
+                  file=STDERR)
+        except PermissionError:
+            print("*** Permission dennied: '{}' ***".format(f_path),
+                  file=STDERR)
+
+
+def _read_text_stdin():
+    """
+    Reads user input from standard input.
+    """
+    print("\n-- Type the message --\n\n")
+    res = ""
+    while True:
+        txt = input()+'\n'
+        if txt == '\n':
+            break
+        res += txt
+    return res
+
+
 def _read_text(in_method: int, perm_len: int) -> str:
     """Read the text to cypher/decypher (from file or console).
+
 
     Parameters
     ----------
     in_method: int - Flag for the input method (0 - File | 1 - Console)
+
 
     Returns
     -------
     str - Users' text (either from a file or console)
 
     """
-    res = ""
-    if (in_method == 0):  # File
-        while True:
-            f_path = _read_path(input("-- Path to file: "))
-            try:
-                res = open(f_path, "r").read()
-                break  # If no exception, exit loop
-            except FileNotFoundError:
-                print("*** No such file or directory: '{}' ***".format(f_path),
-                      file=STDERR)
-            except PermissionError:
-                print("*** Permission dennied: '{}' ***".format(f_path),
-                      file=STDERR)
-    else:  # Stdin
-        print("\n-- Type the message --\n\n")
-        while True:
-            txt = input()+'\n'
-            if txt == '\n':
-                break
-            res += txt
+    res = _read_text_file() if in_method == 0 else _read_text_stdin()
     # Add random chars if text length is not multiple of permitations
     return res if len(res) % perm_len == 0 else res+perm_len*rndCh(letters)
 

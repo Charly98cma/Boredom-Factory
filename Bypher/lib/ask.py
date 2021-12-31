@@ -5,6 +5,7 @@ from sys import stderr as STDERR
 def _operation() -> int:
     """Ask the user for the operation (Cypher or Decypher).
 
+
     Returns
     -------
     int - Operation chosen (0 - Cypher | 1 - Decypher)
@@ -21,6 +22,7 @@ def _operation() -> int:
 
 def _key() -> [int]:
     """Ask the user for the key (2 integers).
+
 
     Returns
     -------
@@ -40,6 +42,7 @@ def _key() -> [int]:
 def _input_method() -> int:
     """Ask the user for the input method (File or Console).
 
+
     Returns
     -------
     int - Input method chosen (0 - File | 1 - Console)
@@ -56,6 +59,7 @@ def _input_method() -> int:
 
 def _output_method() -> int:
     """Ask the user for the output method (File or Console).
+
 
     Returns
     -------
