@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from os import path
-from sys import stderr as STDERR
+from sys import exit, stderr as STDERR
 from itertools import chain
 from random import choice as rndCh
 from string import ascii_letters as letters
@@ -10,6 +10,14 @@ from lib import ask
 
 # Binary representation of each character
 BIN_REP = "0:0{}b"
+
+
+def __permission_error(file_path):
+    return f"*** Permission dennied: '{file_path}' ***"
+
+
+def __file_error(file_path):
+    return f"*** No such file or directory: '{file_path}' ***"
 
 
 def _print_result(text: str, out_method: int) -> None:
@@ -22,16 +30,16 @@ def _print_result(text: str, out_method: int) -> None:
     out_method: int - Flag for the output method (0 - File | 1 - Console)
 
     """
-    if (out_method == 0):
+    if out_method == 0:
         # File
         while True:
             file_path = _read_path(input("-- Path to file: "))
             try:
-                open(file_path, "wa").write(text)
+                with open(file_path, mode='a', encoding='UTF-8') as f:
+                    f.write(text)
                 break
             except PermissionError:
-                print("*** Permission dennied: '{}' ***".format(file_path),
-                      file=STDERR)
+                print(__permission_error(file_path), file=STDERR)
     else:
         # Stdout
         print("\n-- Message --")
@@ -62,15 +70,13 @@ def _read_text_file():
     Reads user input from a file
     """
     while True:
-        f_path = _read_path(input("-- Path to file: "))
+        file_path = _read_path(input("-- Path to file: "))
         try:
-            return open(f_path, "r").read()
+            return open(file_path, 'r', encoding='UTF-8').read()
         except FileNotFoundError:
-            print("*** No such file or directory: '{}' ***".format(f_path),
-                  file=STDERR)
+            print(__file_error(file_path), file=STDERR)
         except PermissionError:
-            print("*** Permission dennied: '{}' ***".format(f_path),
-                  file=STDERR)
+            print(__permission_error, file=STDERR)
 
 
 def _read_text_stdin():
@@ -133,7 +139,7 @@ def _turn_to_binary(text_groups: [[str]], bin_format: str) -> [[str]]:
 
     Returns
     -------
-    [[str]] . List of permutations groups (list) on binary format each char
+    [[str]] . List of permutations groups (list) of each part on binary format
 
     """
     return [[bin_format.format(ord(a)) for a in b] for b in text_groups]
@@ -191,24 +197,27 @@ def _decypher(in_method: int, perm_len: int, letter_len: int) -> str:
 def main():
     """Byphers' main function."""
     try:
-        op = ask._operation()
-        # key[0] = len of permutation groups
-        # key[1] = len of representation
-        key = ask._key()
-        in_method = ask._input_method()
-        out_method = ask._output_method()
+        op = ask.operation()
+        # key_l[0] = len of permutation groups
+        # key_l[1] = len of representation
+        key_l = ask.key()
+        in_method = ask.input_method()
+        out_method = ask.output_method()
         if op == 0:
+
             new_txt = _cypher(
-                in_method, key[0], "{"+"0:0{}b".format(key[1])+"}")
+                in_method, key_l[0], "{"+f"{0:0{key_l[1]}b}"+"}")
         elif op == 1:
             new_txt = _decypher(
-                in_method, key[0], key[1])
+                in_method, key_l[0], key_l[1])
         else:
             print("*** Operation not supported ***", file=STDERR)
             exit(1)
         _print_result(new_txt, out_method)
-    except (TypeError, ValueError, KeyboardInterrupt):
+    except (TypeError, ValueError):
         print("*** You can't do that :P **", file=STDERR)
+        exit(-1)
+    except KeyboardInterrupt:
         exit(-1)
     exit(0)
 
