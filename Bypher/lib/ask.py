@@ -1,8 +1,13 @@
 from getpass import getpass
 from sys import stderr as STDERR
 
+OP_ERROR = "*** INVALID OPERATION ***"
+KEY_ERROR = "*** INVALID KEY ***"
+INPUT_ERROR = "*** INVALID INPUT ***"
+OUTPUT_ERROR = "*** INVALID OUTPUT ***"
 
-def _operation() -> int:
+
+def operation() -> int:
     """Ask the user for the operation (Cypher or Decypher).
 
 
@@ -16,11 +21,11 @@ def _operation() -> int:
         op = int(input())
         if op in {0, 1}:
             break
-        print("*** INVALID OPERATION ***", file=STDERR)
+        print(OP_ERROR, file=STDERR)
     return op
 
 
-def _key() -> [int]:
+def key() -> [int]:
     """Ask the user for the key (2 integers).
 
 
@@ -29,17 +34,17 @@ def _key() -> [int]:
     list() - Two integers (permutations length, and binary format length)
 
     """
-    key = [0, 0]
+    key_l = [0, 0]
     while True:
-        key[0] = (int(getpass("\n-- Enter first key: ")))
-        key[1] = (int(getpass("-- Enter second key: ")))
-        if key[0] >= 2 and key[1] >= 8:
+        key_l[0] = (int(getpass("\n-- Enter first key: ")))
+        key_l[1] = (int(getpass("-- Enter second key: ")))
+        if key_l[0] >= 2 and key_l[1] >= 8:
             break
-        print("*** INVALID KEY ***", file=STDERR)
+        print(KEY_ERROR, file=STDERR)
     return key
 
 
-def _input_method() -> int:
+def input_method() -> int:
     """Ask the user for the input method (File or Console).
 
 
@@ -53,11 +58,11 @@ def _input_method() -> int:
         in_method = int(input())
         if in_method in {0, 1}:
             break
-        print("*** INVALID INPUT ***", file=STDERR)
+        print(INPUT_ERROR, file=STDERR)
     return in_method
 
 
-def _output_method() -> int:
+def output_method() -> int:
     """Ask the user for the output method (File or Console).
 
 
@@ -71,5 +76,5 @@ def _output_method() -> int:
         out_method = int(input())
         if out_method in {0, 1}:
             break
-        print("*** INVALID OUTPUT ***", file=STDERR)
+        print(OUTPUT_ERROR, file=STDERR)
     return out_method
