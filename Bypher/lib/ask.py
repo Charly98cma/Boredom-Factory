@@ -41,7 +41,7 @@ def key() -> [int]:
         if key_l[0] >= 2 and key_l[1] >= 8:
             break
         print(KEY_ERROR, file=STDERR)
-    return key
+    return key_l
 
 
 def input_method() -> int:
