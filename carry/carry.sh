@@ -5,53 +5,65 @@ DIR="/tmp/.carry"
 
 function help {
     echo "\
-Usage: carry -c [FILE]...
-   or: carry -c [DIRECTORY]...
+Usage: carry -c [FILE]... [DIRECTORY]...
    or: carry -d
+   or: carry -r
 
 Mandatory arguments to long options are mandatory for short options too.
-  -c, --carry          add files/directories path to the buffer
+  -c, --carry          add files/directories path to the path buffer
   -d, --drop           move files/directories to the current directory
-
-  -h, --help           display this help and exit"
+  -h, --help           display this help and exit
+  -r, --reset	       delete all entries on path buffer"
 }
 
+# Add files that exists to the buffer file
 function carry {
     # Loop through arguments
-    for arg in "$@"; do
+    for arg in $@; do
 	# Save full path only if file exists
-	if [[ -e "$arg" ]]; then
-	    echo "$(realpath $arg)" >> $DIR
+	if [[ -e $arg ]]; then
+	    echo $(realpath $arg) >> $DIR
 	else
 	    echo "$PKG: $arg: No such file or directory"
 	fi
     done
 }
 
+# Delete buffer file contents
+function reset {
+    truncate -s 0 $DIR
+}
+
+# Move files on the buffer to the current directory
 function drop {
-    exit
+    cat $DIR | while read line; do
+	mv $line $PWD
+    done
+    reset;
 }
 
 function main {
-
+    # Parse flags and parameters
     while [ ! $# -eq 0 ]; do
 	case $1 in
 	    -c | --carry)
-		shift; carry "$@"; break;;
+		shift; carry $@; break;;
 
 	    -d | --drop)
-		shift; drop "$@"; break;;
+		shift; drop $@; break;;
+
+	    -r | --reset)
+		reset; break;;
 
 	    -h | --help)
 		help; break;;
 
-	    *)
+	    *)  # Non-supported flags show help
 		help; exit 1;;
 	esac
     done
-
+    # Good exit
     exit 0
 }
 
-main "$@"
-exit 0
+main $@
