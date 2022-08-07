@@ -5,9 +5,9 @@ DIR="/tmp/.carry"
 
 function help {
     echo "\
-Usage: carry -c [FILE]... [DIRECTORY]...
-   or: carry -d
-   or: carry -r
+Usage: $PKG -c [FILE]... [DIRECTORY]...
+   or: $PKG -d
+   or: $PKG -r
 
 Mandatory arguments to long options are mandatory for short options too.
   -c, --carry          add files/directories path to the path buffer
@@ -24,7 +24,11 @@ function carry {
 	if [[ -e $arg ]]; then
 	    echo $(realpath $arg) >> $DIR
 	else
-	    echo "$PKG: $arg: No such file or directory"
+	    echo "\
+$PKG: cannot carry $arg: No such file or directory
+$PKG: No files or directories stored"
+	    reset
+	    break
 	fi
     done
 }
