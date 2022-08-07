@@ -21,8 +21,8 @@ def decypher(in_method: int, perm_len: int, letter_len: int) -> str:
     ptr_1 = 0
     for ptr_2 in range(perm_len*letter_len, len(raw_text)+1,
                        perm_len*letter_len):
-        line = raw_text[ptr_1:ptr_2]
         for i in range(perm_len):
-            clear_txt += chr(int(line[i::perm_len], 2))
+            clear_txt += chr(int(raw_text[ptr_1:ptr_2][i::perm_len], 2))
             ptr_1 = ptr_2
+        print(clear_txt)
     return clear_txt

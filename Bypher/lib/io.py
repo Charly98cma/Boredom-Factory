@@ -18,14 +18,12 @@ def print_result(text: str, out_method: int) -> None:
     """
     if out_method == 0:
         # File
-        while True:
-            file_path = read_path(input("-- Path to file: "))
-            try:
-                with open(file_path, mode='a', encoding='UTF-8') as f:
-                    f.write(text)
-                break
-            except PermissionError:
-                print(err.permission_error(file_path), file=STDERR)
+        file_path = read_path(input("-- Path to file: "))
+        try:
+            with open(file_path, mode='a', encoding='UTF-8') as f:
+                f.write(text)
+        except PermissionError:
+            print(err.permission_error(file_path), file=STDERR)
     else:
         # Stdout
         print("\n-- Message --")
@@ -46,9 +44,7 @@ def read_path(file_path: str) -> str:
     str - Absolute path to the file
 
     """
-    if file_path[0] == '~':
-        return path.abspath(file_path[1:])
-    return file_path
+    return path.abspath(file_path[1:]) if file_path[0] == '~' else file_path
 
 
 def read_text_file():

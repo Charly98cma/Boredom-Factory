@@ -3,7 +3,6 @@ from sys import exit, stderr as STDERR
 from lib import ask, io, cypher, decypher
 
 
-
 def main():
     """Byphers' main function."""
     try:
@@ -24,7 +23,7 @@ def main():
             exit(1)
         io.print_result(new_txt, out_method)
     except (TypeError, ValueError):
-        print("*** You can't do that :P **", file=STDERR)
+        print("*** You can't do that >:( ***", file=STDERR)
         exit(-1)
     except KeyboardInterrupt:
         exit(-1)

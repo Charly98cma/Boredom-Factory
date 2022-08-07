@@ -25,7 +25,7 @@ def operation() -> int:
     return op
 
 
-def key() -> [int]:
+def key() -> list[int]:
     """Ask the user for the key (2 integers).
 
 
