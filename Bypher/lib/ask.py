@@ -18,8 +18,7 @@ def operation() -> int:
     """
     while True:
         print("-- Select operation --\n0 - Cypher | 1 - Decypher")
-        op = int(input())
-        if op in {0, 1}:
+        if (op := int(input())) in {0, 1}:
             break
         print(OP_ERROR, file=STDERR)
     return op
@@ -36,9 +35,9 @@ def key() -> list[int]:
     """
     key_l = [0, 0]
     while True:
-        key_l[0] = (int(getpass("\n-- Enter first key: ")))
-        key_l[1] = (int(getpass("-- Enter second key: ")))
-        if key_l[0] >= 2 and key_l[1] >= 8:
+        key_l[0] = int(getpass("\n-- Enter first key: "))
+        key_l[1] = int(getpass("-- Enter second key: "))
+        if key_l[0] > 3 and key_l[1] > 9:
             break
         print(KEY_ERROR, file=STDERR)
     return key_l
@@ -53,13 +52,7 @@ def input_method() -> int:
     int - Input method chosen (0 - File | 1 - Console)
 
     """
-    while True:
-        print("\n-- Input method --\n0 - File | 1 - Console")
-        in_method = int(input())
-        if in_method in {0, 1}:
-            break
-        print(INPUT_ERROR, file=STDERR)
-    return in_method
+    return __io_method("Input", INPUT_ERROR)
 
 
 def output_method() -> int:
@@ -71,10 +64,13 @@ def output_method() -> int:
     int - Output method choen (0 - File | 1 - Console)
 
     """
+    return __io_method("Output", OUTPUT_ERROR)
+
+
+def __io_method(io_text, io_error):
     while True:
-        print("\n-- Output method --\n0 - File | 1 - Console")
-        out_method = int(input())
-        if out_method in {0, 1}:
+        print(f"\n-- {io_text} method --\n0 - File | 1 - Console")
+        if (in_out_method := int(input())) in {0, 1}:
             break
-        print(OUTPUT_ERROR, file=STDERR)
-    return out_method
+        print(io_error, file=STDERR)
+    return in_out_method

@@ -18,11 +18,9 @@ def decypher(in_method: int, perm_len: int, letter_len: int) -> str:
     """
     clear_txt = ""
     raw_text = io.read_text(in_method, perm_len)
-    ptr_1 = 0
-    for ptr_2 in range(perm_len*letter_len, len(raw_text)+1,
-                       perm_len*letter_len):
-        for i in range(perm_len):
-            clear_txt += chr(int(raw_text[ptr_1:ptr_2][i::perm_len], 2))
-            ptr_1 = ptr_2
-        print(clear_txt)
+    ptr_1, ptr_2 = 0, perm_len*letter_len
+
+    for i in range(perm_len):
+        clear_txt += chr(int(raw_text[ptr_1:ptr_2][i::perm_len], 2))
+        ptr_1 += perm_len
     return clear_txt

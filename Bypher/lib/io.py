@@ -6,6 +6,26 @@ from os import path
 from lib import err_msgs as err
 
 
+def __print_file(text: str):
+    file_path = read_path(input("-- Path to file: "))
+    try:
+        with open(file_path, mode='a', encoding='UTF-8') as f:
+            f.write(text)
+    except PermissionError:
+        print(err.permission_error(file_path), file=STDERR)
+
+
+def __print_console(text: str):
+    print("\n-- Message --")
+    print(text)
+
+
+PRINT_METHODS = {
+    0: __print_file,
+    1: __print_console
+}
+
+
 def print_result(text: str, out_method: int) -> None:
     """Print the text after applying the operation specified by the user.
 
@@ -16,18 +36,7 @@ def print_result(text: str, out_method: int) -> None:
     out_method: int - Flag for the output method (0 - File | 1 - Console)
 
     """
-    if out_method == 0:
-        # File
-        file_path = read_path(input("-- Path to file: "))
-        try:
-            with open(file_path, mode='a', encoding='UTF-8') as f:
-                f.write(text)
-        except PermissionError:
-            print(err.permission_error(file_path), file=STDERR)
-    else:
-        # Stdout
-        print("\n-- Message --")
-        print(text)
+    PRINT_METHODS[out_method](text)
 
 
 def read_path(file_path: str) -> str:
@@ -68,8 +77,7 @@ def read_text_stdin():
     print("\n-- Type the message --\n\n")
     res = ""
     while True:
-        txt = input()+'\n'
-        if txt == '\n':
+        if (txt := input()+'\n') == '\n':
             break
         res += txt
     return res

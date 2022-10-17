@@ -57,8 +57,7 @@ def cypher(in_method: int, perm_len: int, bin_format: str) -> str:
     """
     coded_text = ""
     raw_text = io.read_text(in_method, perm_len)
-    for block in turn_to_binary(
-            sliding_window(raw_text, perm_len),
-            bin_format):
+    binary = turn_to_binary(sliding_window(raw_text, perm_len), bin_format)
+    for block in binary:
         coded_text += ''.join(list(chain.from_iterable(zip(*block))))
     return coded_text
