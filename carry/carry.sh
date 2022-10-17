@@ -41,30 +41,29 @@ function reset {
 # Move files on the buffer to the current directory
 function drop {
     cat $DIR | while read line; do
-	mv $line $PWD
+		mv $line $PWD
     done
-    reset;
 }
 
 function main {
     # Parse flags and parameters
     while [ ! $# -eq 0 ]; do
-	case $1 in
-	    -c | --carry)
-		shift; carry $@; break;;
+		case $1 in
+			-c | --carry)
+			shift; carry $@; break;;
 
-	    -d | --drop)
-		shift; drop $@; break;;
+			-d | --drop)
+			shift; drop $@; reset; break;;
 
-	    -r | --reset)
-		reset; break;;
+			-r | --reset)
+			reset; break;;
 
-	    -h | --help)
-		help; break;;
+			-h | --help)
+			help; break;;
 
-	    *)  # Non-supported flags show help
-		help; exit 1;;
-	esac
+			*)  # Non-supported flags show help
+			help; exit 1;;
+		esac
     done
     # Good exit
     exit 0
