@@ -41,7 +41,14 @@ function reset {
 # Move files on the buffer to the current directory
 function drop {
     cat $DIR | while read line; do
-		mv $line $PWD
+		if [[ -f $PWD/$(basename $line) ]]; then
+			read -p "$PKG: overwrite $PWD/'$(basename $line)'?" OVWR
+			echo "Patata"
+			echo $OVWR
+#			if  [[ $OVWR == "y" || $OVWR == "yes" || OVWR == "" ]]
+		else
+			mv $line $PWD
+		fi
     done
 }
 
