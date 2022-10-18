@@ -3,7 +3,7 @@ from lib import io, err_msgs
 
 
 def sliding_window(raw_text: str, perm_len: int) -> list[list[str]]:
-    """Create a list of lists of each permutation group.
+    """Slices the raw text in chunks of equal length permutation groups
 
 
     Parameters
@@ -22,7 +22,7 @@ def sliding_window(raw_text: str, perm_len: int) -> list[list[str]]:
 
 
 def turn_to_binary(text_groups: list[list[str]], bin_format: str) -> list[list[str]]:
-    """Create a list of lists with eahc permutation group on binary format.
+    """Returns a list of lists with each permutation group (list of characters) on binary format
 
 
     Parameters
