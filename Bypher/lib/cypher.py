@@ -1,8 +1,8 @@
 from itertools import chain
-from lib import io, err_msgs
+from lib import io
 
 
-def sliding_window(raw_text: str, perm_len: int) -> list[list[str]]:
+def sliding_window(raw_text: str, perm_len: int) -> list[str]:
     """Slices the raw text in chunks of equal length permutation groups
 
 
@@ -14,14 +14,14 @@ def sliding_window(raw_text: str, perm_len: int) -> list[list[str]]:
 
     Returns
     -------
-    list[list[str]] - List of permutations groups (lists)
+    list[str] - List of permutations groups (lists)
 
     """
     return [raw_text[i:i+perm_len]
             for i in range(0, len(raw_text), perm_len)]
 
 
-def turn_to_binary(text_groups: list[list[str]], bin_format: str) -> list[list[str]]:
+def turn_to_binary(text_groups: list[str], bin_format: str) -> list[list[str]]:
     """Returns a list of lists with each permutation group (list of characters) on binary format
 
 
