@@ -13,6 +13,7 @@ Mandatory arguments to long options are mandatory for short options too.
   -c, --carry          add files/directories path to the path buffer
   -d, --drop           move files/directories to the current directory
   -h, --help           display this help and exit
+  -l, --list		   display the carried files
   -r, --reset	       delete all entries on path buffer"
 }
 
@@ -33,23 +34,29 @@ $PKG: No files or directories stored"
     done
 }
 
+# Move files on the buffer to the current directory
+function drop {
+    cat $DIR | while read line; do
+		if [[ -f $PWD/$(basename $line) ]]; then
+			read -p "$PKG: overwrite $(basename $line)? : " OVWR < /dev/tty
+			if  [[ $OVWR == "y" || $OVWR == "yes" || OVWR == "" ]]; then
+				mv $line $PWD
+			fi
+		else
+			mv $line $PWD
+		fi
+    done
+}
+
+
 # Delete buffer file contents
 function reset {
     truncate -s 0 $DIR
 }
 
-# Move files on the buffer to the current directory
-function drop {
-    cat $DIR | while read line; do
-		if [[ -f $PWD/$(basename $line) ]]; then
-			read -p "$PKG: overwrite $PWD/'$(basename $line)'?" OVWR
-			echo "Patata"
-			echo $OVWR
-#			if  [[ $OVWR == "y" || $OVWR == "yes" || OVWR == "" ]]
-		else
-			mv $line $PWD
-		fi
-    done
+# Lists the contents of $DIR (/tmp/.carry)
+function list {
+	cat $DIR
 }
 
 function main {
@@ -64,6 +71,9 @@ function main {
 
 			-r | --reset)
 			reset; break;;
+
+			-l | --list)
+			list; break;;
 
 			-h | --help)
 			help; break;;
